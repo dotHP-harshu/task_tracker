@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/task_tracker",
+  base: "/task_tracker/",
   plugins: [react(),
   tailwindcss(),
   VitePWA({
@@ -18,7 +18,8 @@ export default defineConfig({
       theme_color: '#ffffff',
       background_color: '#ffffff',
       display: 'standalone',
-      start_url: '/',
+      start_url: '/task_tracker/',
+      scope: "/task_tracker/",
       icons: [
         {
           src: 'task.png',

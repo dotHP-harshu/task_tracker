@@ -1,26 +1,35 @@
 import React, { useEffect, useState, useRef } from "react";
 
-function Timer() {
-  const [isTimerStart, setIsTimerStart] = useState(false);
+function Timer({ task, isTimerStart, setIsTimerStart }) {
   const [time, setTime] = useState(0);
-
   const timerRef = useRef(null);
+  const timeRef = useRef(time);
 
   const resetTimer = () => {
     clearInterval(timerRef.current);
-    setIsTimerStart(false);
-    setTime(0);
+    let taskTime = task.taskHours * 3600 + task.taskMin * 60 + task.taskSec;
+    setTime(parseInt(taskTime));
+    timeRef.current = parseInt(taskTime);
   };
+
+  useEffect(() => {
+    resetTimer();
+  }, [task]);
 
   useEffect(() => {
     if (isTimerStart) {
       timerRef.current = setInterval(() => {
-        setTime((prev) => prev + 10);
-      }, 10);
-    } else {
-      clearInterval(timerRef.current);
+        if (timeRef.current === 0) {
+          setTime(0);
+          timeRef.current = 0;
+          setIsTimerStart(false);
+          clearInterval(timerRef.current);
+          return;
+        }
+        setTime((prev) => prev - 1);
+        timeRef.current -= 1;
+      }, 1000);
     }
-
     return () => clearInterval(timerRef.current);
   }, [isTimerStart]);
 
@@ -28,25 +37,19 @@ function Timer() {
     <div className="p-4 bg-zinc-700 rounded-lg mt-4 flex flex-col gap-4 justify-center items-center text-white">
       <div className="text-4xl flex gap-1 items-end justify-center">
         <span>
-          {Math.floor(time / 3600000)
+          {Math.floor(time / 3600)
             .toString()
             .padStart(2, "0")}
         </span>
         :
         <span>
-          {Math.floor((time % 3600000) / 60000)
+          {Math.floor((time % 3600) / 60)
             .toString()
             .padStart(2, "0")}
         </span>
         :
         <span>
-          {Math.floor(((time % 3600000) % 60000) / 1000)
-            .toString()
-            .padStart(2, "0")}
-        </span>
-        :
-        <span className="text-base">
-          {Math.floor((time % 1000) / 10)
+          {Math.floor((time % 3600) % 60)
             .toString()
             .padStart(2, "0")}
         </span>

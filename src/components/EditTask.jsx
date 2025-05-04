@@ -5,13 +5,18 @@ function EditTask({ task, setTaskList }) {
 
   const [taskName, setTaskName] = useState(task.taskName);
   const [taskDescription, setTaskDescription] = useState(task.taskDescription);
+  const [taskHours, setTaskHours] = useState(task.taskHours);
+  const [taskMin, setTaskMin] = useState(task.taskMin);
+  const [taskSec, setTaskSec] = useState(task.taskSec);
 
   const handleForm = (e) => {
     e.preventDefault();
     setIsShowingEdit(false);
     setTaskList((prev) => {
       let tasks = prev.map((p) =>
-        p === task ? { taskName, taskDescription } : p
+        p === task
+          ? { taskName, taskDescription, taskHours, taskMin, taskSec }
+          : p
       );
       localStorage.setItem("Tasks", JSON.stringify(tasks));
       return tasks;
@@ -63,6 +68,65 @@ function EditTask({ task, setTaskList }) {
                   className="bg-zinc-700 px-2 py-1 w-full outline-none mt-2 focus:bg-zinc-600"
                 />
               </div>
+
+              <div className="flex w-full gap-1 mt-4">
+                <span className="flex flex-col gap-2 w-20">
+                  <label htmlFor="hr" className="text-sm font-semibold pl-1">
+                    Hr
+                  </label>
+                  <input
+                    value={taskHours}
+                    onChange={(e) => {
+                      setTaskHours(e.target.value);
+                    }}
+                    id="hr"
+                    className="bg-zinc-700 px-2 py-1 outline-none w-20"
+                    maxLength={2}
+                    min={0}
+                    type="number"
+                    placeholder="Hr"
+                  />
+                </span>
+
+                <span className="flex flex-col gap-2 w-20">
+                  <label htmlFor="min" className="text-sm font-semibold pl-1">
+                    Min
+                  </label>
+                  <input
+                    value={taskMin}
+                    onChange={(e) => {
+                      setTaskMin(e.target.value);
+                    }}
+                    id="min"
+                    className="bg-zinc-700 px-2 py-1 outline-none w-20"
+                    maxLength={2}
+                    min={0}
+                    max={60}
+                    type="number"
+                    placeholder="Mi"
+                  />
+                </span>
+
+                <span className="flex flex-col gap-2 w-20">
+                  <label htmlFor="sec" className="text-sm font-semibold pl-1">
+                    Sec
+                  </label>
+                  <input
+                    id="sec"
+                    value={taskSec}
+                    onChange={(e) => {
+                      setTaskSec(e.target.value);
+                    }}
+                    className="bg-zinc-700 px-2 py-1 outline-none w-20"
+                    maxLength={2}
+                    min={1}
+                    max={60}
+                    type="number"
+                    placeholder="Se"
+                  />
+                </span>
+              </div>
+
               <div className="w-full mt-6 ">
                 <label
                   htmlFor="task-description"
